@@ -1,7 +1,6 @@
 name: Monitor ICU course seat
 
 on:
-  push:
   schedule:
     # GitHub schedules are UTC. This runs at 00, 05, 10, ... minutes each hour.
     - cron: "*/5 * * * *"
@@ -21,7 +20,3 @@ jobs:
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
         # A nonzero status when a seat opens triggers GitHub email.
         run: python3 monitor.py --state-file /tmp/seat-monitor-state.json --fail-when-open
-      - name: Temporary email notification test
-        run: |
-          echo "Temporary email notification test"
-          exit 1
