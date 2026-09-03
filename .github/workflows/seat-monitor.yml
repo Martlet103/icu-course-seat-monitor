@@ -19,4 +19,5 @@ jobs:
         env:
           # Add this as a GitHub Actions repository secret after uploading.
           WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
-        run: python3 monitor.py --state-file /tmp/seat-monitor-state.json
+        # A nonzero status when a seat opens triggers GitHub's workflow alert.
+        run: python3 monitor.py --state-file /tmp/seat-monitor-state.json --fail-when-open
