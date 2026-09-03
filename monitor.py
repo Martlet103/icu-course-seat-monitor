@@ -113,6 +113,11 @@ def main() -> int:
     argument_parser.add_argument("--url", default=os.getenv("COURSE_LIST_URL", DEFAULT_URL))
     argument_parser.add_argument("--state-file", default=os.getenv("STATE_FILE", "state.json"))
     argument_parser.add_argument("--webhook-url", default=os.getenv("WEBHOOK_URL"))
+    argument_parser.add_argument(
+        "--fail-when-open",
+        action="store_true",
+        help="Exit with status 1 when a seat is available (useful for Actions email alerts).",
+    )
     arguments = argument_parser.parse_args()
 
     try:
@@ -141,6 +146,10 @@ def main() -> int:
         state_path,
         {"course": arguments.course, "seats": seats, "checked_at": timestamp},
     )
+    if seats > 0 and arguments.fail_when_open:
+        # A scheduled GitHub Actions failure sends a notification to the account
+        # that owns and maintains the workflow.
+        return 1
     return 0
 
 
