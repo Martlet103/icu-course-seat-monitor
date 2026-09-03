@@ -1,0 +1,22 @@
+name: Monitor ICU course seat
+
+on:
+  schedule:
+    # GitHub schedules are UTC. This runs at 00, 05, 10, ... minutes each hour.
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check-seat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check ISC104 (registration number 21342)
+        env:
+          # Add this as a GitHub Actions repository secret after uploading.
+          WEBHOOK_URL: ${{ secrets.WEBHOOK_URL }}
+        run: python3 monitor.py --state-file /tmp/seat-monitor-state.json
